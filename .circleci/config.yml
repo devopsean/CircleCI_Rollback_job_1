@@ -54,6 +54,6 @@ commands:
           command: |
 workflows:
   # Name the workflow
-      - create_infrastructure
-      - smoke_test
+  - create_infrastructure
+  - smoke_test
       
