@@ -1,0 +1,63 @@
+version: 2.1
+
+orbs:
+
+jobs:  
+  configure_infrastructure: 
+    docker:
+      - image: python:3.10.5-alpine3.16
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["74:7a:ac:99:82:f6:ee:96:e3:0c:00:f0:b9:6e:fe:e6"] # You can get this ID in the section where you registered the SSH Key
+      - run:
+          name: Install ansible
+          command: |
+            # install the dependencies needed for your playbook
+            apk add --update ansible 
+      - run:
+          name: Run playbook and Configure server
+          command: |
+            ansible-playbook -i inventory.txt main.yml
+
+  # Exercise: Smoke Testing
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run:
+          name: Test job
+       # Fail the job intentionally to simulate an error.
+          command:  return 1
+      - destroy_environment  
+  create_infrastructure: 
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
+              --region us-east-1
+commands:
+   # Exercise - Rollback
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+
+workflows:
+  # Name the workflow
+  myWorkflow:
+    jobs:
+      - create_infrastructure
+      - smoke_test
+      
