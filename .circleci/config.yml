@@ -43,5 +43,6 @@ workflows:
   myWorkflow:
     jobs:
       - create_infrastructure
+        id: ${CIRCLE_WORKFLOW_ID:0:7}
       - smoke_test
       
