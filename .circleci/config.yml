@@ -1,6 +1,4 @@
-version: 2.1
 
-orbs:
 
 commands:
    # Exercise - Rollback
@@ -17,7 +15,7 @@ commands:
 jobs:  
   create_infrastructure: 
     docker:
-      - image: alpine/latest
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
