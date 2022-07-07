@@ -14,8 +14,11 @@ commands:
             aws cloudformation delete-stack --stack-name myStack-<< parameters.id >>
           
 jobs:  
- 
   create_infrastructure: 
+    description: destroy them all
+    parameters:
+      id:
+        type: string
     docker:
       - image: amazon/aws-cli
     steps:
