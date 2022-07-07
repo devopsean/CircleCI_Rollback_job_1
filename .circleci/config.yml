@@ -17,7 +17,7 @@ commands:
 jobs:  
   create_infrastructure: 
     docker:
-      - image: amazon/aws-cli
+      - image: alpine/latest
     steps:
       - checkout
       - run:
