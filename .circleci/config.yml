@@ -30,18 +30,7 @@ jobs:
           name: Run playbook and Configure server
           command: |
             ansible-playbook -i inventory.txt main.yml
-  create_infrastructure: 
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Create Cloudformation Stack
-          command: |
-            aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
-              --region us-east-1
+
   # Exercise: Smoke Testing
   smoke_test:
     docker:
@@ -50,7 +39,8 @@ jobs:
       - run:
           name: Test job
        # Fail the job intentionally to simulate an error.
-          command:  return 1
+          command: |
+            return 1
       - destroy_environment  
 
 
