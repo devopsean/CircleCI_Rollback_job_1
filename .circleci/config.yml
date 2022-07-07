@@ -12,12 +12,11 @@ commands:
 jobs:  
   smoke_test:
     docker:
-      - image: amazon/aws-cli
+      - image: alpine:latest
     steps:
       - run: 
           name: simulate error  
-          command: |
-            return 1
+          command: return 1
       - destroy_environment 
   create_infrastructure: 
     docker:
