@@ -33,7 +33,7 @@ jobs:
       - image: alpine:latest
     steps:
       - run:
-          name: smoke test
+          name: Test job
        # Fail the job intentionally to simulate an error.
           command: return 1
       - destroy_environment  
