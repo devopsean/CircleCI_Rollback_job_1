@@ -1,8 +1,6 @@
 version: 2.1
-
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
-
 commands:
   destroy_environment:
     steps:
@@ -19,10 +17,8 @@ jobs:
       - run: 
           name: simulate error  
           command: |
-            exit 1
+            return 1
       - destroy_environment 
-        
-  
   create_infrastructure: 
     docker:
       - image: amazon/aws-cli
@@ -35,13 +31,7 @@ jobs:
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
               --region us-east-1
-
-
-           
-
-
 workflows:
-  # Name the workflow
   myWorkflow:
     jobs:
       - create_infrastructure
